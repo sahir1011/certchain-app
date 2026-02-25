@@ -12,11 +12,16 @@ const initDB = async () => {
         await sequelize.authenticate();
         console.log('PostgreSQL connection has been established successfully.');
 
-        // Sync models (alter: true updates tables without dropping them)
-        await sequelize.sync({ alter: true });
-        console.log('Database synced successfully.');
+        // Prevent Vercel from trying to alter tables concurrently on every cold start
+        if (process.env.VERCEL !== '1') {
+            await sequelize.sync({ alter: true });
+            console.log('Database synced successfully.');
+        } else {
+            console.log('Vercel environment detected – skipping schema sync.');
+        }
     } catch (error) {
         console.error('Unable to connect to the database:', error);
+        throw error;
     }
 };
 

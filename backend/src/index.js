@@ -39,6 +39,26 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser()); // Parse cookies
 
+// ── bootstrap middleware ────────────────────────────────────
+let isBootstrapped = false;
+app.use(async (req, res, next) => {
+  if (isBootstrapped) return next();
+  try {
+    console.log("━".repeat(50));
+    console.log(" CertChain  –  Initializing serverless connections...");
+
+    await blockchain.init();
+    const { initDB } = require("./models");
+    await initDB();
+
+    isBootstrapped = true;
+    next();
+  } catch (error) {
+    console.error("Bootstrap error:", error);
+    res.status(500).json({ error: "Server Initialization Failed", details: error.message });
+  }
+});
+
 // ── routes ──────────────────────────────────────────────────
 app.use("/api/auth", authRouter);
 app.use("/api", routes);
@@ -54,49 +74,13 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ message: "Internal server error" });
 });
 
-// ── bootstrap ───────────────────────────────────────────────
-async function bootstrap() {
-  console.log("━".repeat(50));
-  console.log(" CertChain  –  Backend API");
-  console.log("━".repeat(50));
-
-  // Initialise ethers connection
-  await blockchain.init();
-
-  // Initialise Database
-  const { initDB } = require("./models");
-  await initDB();
-
-  // Quick connectivity check
-  try {
-    const block = await blockchain.getLatestBlockNumber();
-    console.log(`[boot] Sepolia latest block: ${block}`);
-  } catch (e) {
-    console.error("[boot] ⚠️  Could not reach Sepolia RPC –", e.message);
-    console.log("       The server will still start but on-chain calls will fail.");
-  }
-}
-
 // Only start the server if we are running directly (not imported as a module)
-// Vercel imports the app, so we don't want to call app.listen()
 if (require.main === module) {
-  bootstrap().then(() => {
-    app.listen(PORT, () => {
-      console.log(`\n✅  Server listening on http://localhost:${PORT}`);
-      console.log("    Health  → GET  /api/health");
-      // ... logs
-    });
-  }).catch((e) => {
-    console.error("Fatal bootstrap error:", e);
-    process.exit(1);
+  app.listen(PORT, () => {
+    console.log(`\n✅  Server listening on http://localhost:${PORT}`);
+    console.log("    Connections will initialize on first request.");
+    console.log("    Health  → GET  /api/health");
   });
-} else {
-  // For Vercel/Serverless, we might need to verify the DB/Blockchain connection per request
-  // or rely on container reuse.
-  // We can lazily init in the route handlers or middleware if needed,
-  // but typically Vercel reuses the instance.
-  // Let's at least try to init once.
-  bootstrap().catch(console.error);
 }
 
 module.exports = app;
