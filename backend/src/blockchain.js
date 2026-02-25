@@ -5,25 +5,25 @@
  * Every on-chain read / write goes through this module.
  */
 
-const { ethers }   = require("ethers");
-const path         = require("path");
-const ABI          = require(path.join(__dirname, "..", "config", "abi.json"));
+const { ethers } = require("ethers");
+const path = require("path");
+const ABI = require("../config/abi.json");
 
 let provider, signer, contract;
 
 function init() {
-  const rpcUrl         = process.env.SEPOLIA_RPC_URL;
-  const privateKey     = process.env.PRIVATE_KEY;
+  const rpcUrl = process.env.RPC_URL || process.env.SEPOLIA_RPC_URL;
+  const privateKey = process.env.PRIVATE_KEY;
   const contractAddress = process.env.CONTRACT_ADDRESS;
 
   if (!rpcUrl || !privateKey || !contractAddress) {
     throw new Error(
-      "Missing env vars.  Ensure SEPOLIA_RPC_URL, PRIVATE_KEY, and CONTRACT_ADDRESS are set in .env"
+      "Missing env vars. Ensure RPC_URL (or SEPOLIA_RPC_URL), PRIVATE_KEY, and CONTRACT_ADDRESS are set in Vercel Environment Variables."
     );
   }
 
   provider = new ethers.JsonRpcProvider(rpcUrl);
-  signer   = new ethers.Wallet(privateKey, provider);
+  signer = new ethers.Wallet(privateKey, provider);
   contract = new ethers.Contract(contractAddress, ABI, signer);
 
   console.log("[blockchain] initialised");
@@ -35,7 +35,7 @@ function init() {
 // ── helpers ─────────────────────────────────────────────────────────────
 function getContract() { return contract; }
 function getProvider() { return provider; }
-function getSigner()   { return signer;   }
+function getSigner() { return signer; }
 
 // ── Issue ───────────────────────────────────────────────────────────────
 /**
@@ -44,16 +44,16 @@ function getSigner()   { return signer;   }
  * @returns {object}  { txHash, blockNumber, issuedAt }
  */
 async function issueCertOnChain(certHash, studentId) {
-  const tx      = await contract.issueCertificate(certHash, studentId);
+  const tx = await contract.issueCertificate(certHash, studentId);
   const receipt = await tx.wait();
 
   // Pull the issuedAt timestamp from the receipt block
-  const block   = await provider.getBlock(receipt.blockNumber);
+  const block = await provider.getBlock(receipt.blockNumber);
 
   return {
-    txHash      : receipt.hash,
-    blockNumber : receipt.blockNumber,
-    issuedAt    : block.timestamp,
+    txHash: receipt.hash,
+    blockNumber: receipt.blockNumber,
+    issuedAt: block.timestamp,
   };
 }
 
@@ -63,7 +63,7 @@ async function issueCertOnChain(certHash, studentId) {
  * @returns {object}  { txHash }
  */
 async function revokeCertOnChain(certHash) {
-  const tx      = await contract.revokeCertificate(certHash);
+  const tx = await contract.revokeCertificate(certHash);
   const receipt = await tx.wait();
   return { txHash: receipt.hash };
 }
