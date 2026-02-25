@@ -126,7 +126,7 @@ router.post("/login", async (req, res) => {
         res.cookie("sessionToken", sessionToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             maxAge: SESSION_DURATION,
         });
 
@@ -289,7 +289,7 @@ router.post("/student/login", async (req, res) => {
         res.cookie("studentSessionToken", sessionToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             maxAge: SESSION_DURATION,
         });
 
