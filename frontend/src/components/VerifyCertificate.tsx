@@ -7,6 +7,7 @@ import type { VerifyResponse, CertificateRecord } from "@/utils/api";
 import jsQR from "jsqr";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { QRCodeCanvas } from "qrcode.react";
 
 export default function VerifyCertificate() {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -18,6 +19,11 @@ export default function VerifyCertificate() {
   const [studentResults, setStudentResults] = useState<CertificateRecord[]>([]);
   const [error, setError] = useState<string | null>(null);
 
+  // PDF Generation State
+  const [selectedCert, setSelectedCert] = useState<CertificateRecord | null>(null);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const certificateRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     // Auto-verify if hash present in URL
     const params = new URLSearchParams(window.location.search);
@@ -26,6 +32,46 @@ export default function VerifyCertificate() {
       verifyHash(hashParam);
     }
   }, []);
+
+  // Handle PDF Download
+  useEffect(() => {
+    if (selectedCert && certificateRef.current) {
+      const generatePDF = async () => {
+        setIsGeneratingPdf(true);
+        try {
+          // Small delay to ensure DOM is rendered
+          await new Promise(resolve => setTimeout(resolve, 500));
+
+          const canvas = await html2canvas(certificateRef.current!, {
+            scale: 2,
+            useCORS: true,
+            logging: false,
+            backgroundColor: "#ffffff"
+          });
+
+          const imgData = canvas.toDataURL("image/png");
+          const pdf = new jsPDF({
+            orientation: "landscape",
+            unit: "mm",
+            format: "a4",
+          });
+
+          const pdfWidth = pdf.internal.pageSize.getWidth();
+          const pdfHeight = pdf.internal.pageSize.getHeight();
+          pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+          pdf.save(`certificate-${selectedCert.studentId}-${selectedCert.courseName}.pdf`);
+        } catch (err) {
+          console.error("PDF Generation failed", err);
+          alert("Failed to generate PDF");
+        } finally {
+          setIsGeneratingPdf(false);
+          setSelectedCert(null);
+        }
+      };
+
+      generatePDF();
+    }
+  }, [selectedCert]);
 
   const handleHashVerify = async (e: FormEvent) => {
     e.preventDefault();
@@ -209,26 +255,16 @@ export default function VerifyCertificate() {
             {/* Download Button */}
             {result.isValid && result.certificate && (
               <button
-                onClick={async () => {
-                  const element = document.getElementById('certificate-card');
-                  if (!element) return;
-
-                  try {
-                    const canvas = await html2canvas(element, { scale: 2, backgroundColor: "#1e1e1e" });
-                    const imgData = canvas.toDataURL('image/png');
-                    const pdf = new jsPDF('p', 'mm', 'a4');
-                    const pdfWidth = pdf.internal.pageSize.getWidth();
-                    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-                    pdf.save(`certificate-${result?.certificate?.certificateHash.slice(0, 10)}.pdf`);
-                  } catch (err) {
-                    console.error("Download failed", err);
-                  }
-                }}
-                className="btn-secondary w-full flex items-center justify-center gap-2 mt-4"
+                onClick={() => setSelectedCert(result.certificate!)}
+                disabled={isGeneratingPdf}
+                className="btn-secondary w-full flex items-center justify-center gap-2 mt-4 disabled:opacity-50"
               >
-                <FileText size={18} /> Download PDF
+                {isGeneratingPdf && selectedCert?.certificateHash === result.certificate.certificateHash ? (
+                  <Loader2 size={18} className="animate-spin" />
+                ) : (
+                  <FileText size={18} />
+                )}
+                Download PDF
               </button>
             )}
           </div>
@@ -261,26 +297,16 @@ export default function VerifyCertificate() {
                 {/* Download Button for list items */}
                 {c.isValid && (
                   <button
-                    onClick={async () => {
-                      const element = document.getElementById(`cert-${c.certificateHash}`);
-                      if (!element) return;
-
-                      try {
-                        const canvas = await html2canvas(element, { scale: 2, backgroundColor: "#1e1e1e" });
-                        const imgData = canvas.toDataURL('image/png');
-                        const pdf = new jsPDF('p', 'mm', 'a4');
-                        const pdfWidth = pdf.internal.pageSize.getWidth();
-                        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-                        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-                        pdf.save(`certificate-${c.certificateHash.slice(0, 10)}.pdf`);
-                      } catch (err) {
-                        console.error("Download failed", err);
-                      }
-                    }}
-                    className="text-gray-400 hover:text-white text-xs flex items-center gap-1 mt-2"
+                    onClick={() => setSelectedCert(c)}
+                    disabled={isGeneratingPdf}
+                    className="text-gray-400 hover:text-white text-xs flex items-center gap-1 mt-2 disabled:opacity-50"
                   >
-                    <FileText size={12} /> Download PDF
+                    {isGeneratingPdf && selectedCert?.certificateHash === c.certificateHash ? (
+                      <Loader2 size={12} className="animate-spin" />
+                    ) : (
+                      <FileText size={12} />
+                    )}
+                    Download PDF
                   </button>
                 )}
               </div>
@@ -294,6 +320,103 @@ export default function VerifyCertificate() {
           <div className="glass-card p-6 text-center text-gray-400">No certificates found for this student ID.</div>
         )
       }
+
+      {/* Hidden Certificate for PDF Generation */}
+      {selectedCert && (
+        <div style={{ position: "fixed", left: "-10000px", top: 0 }}>
+          <div
+            ref={certificateRef}
+            className="relative bg-white text-black shadow-2xl mx-auto overflow-hidden"
+            style={{
+              width: "800px",
+              height: "600px",
+              flexShrink: 0,
+              fontFamily: "'Times New Roman', serif"
+            }}
+          >
+            <div className="w-full h-full p-12 border-[20px] border-double border-gray-200 relative bg-white">
+              <div className="w-full h-full border-2 border-gray-800 p-8 flex flex-col justify-between items-center relative overflow-hidden">
+                {/* Watermark */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none select-none z-0">
+                  <span className="text-[150px] font-bold rotate-[-15deg]">CERTIFIED</span>
+                </div>
+
+                {/* Content Container - Flex Column */}
+                <div className="flex flex-col items-center justify-center w-full h-full z-10 space-y-6">
+
+                  {/* Top: Institution */}
+                  <div className="text-center">
+                    <div className="flex justify-center mb-4">
+                      <div className="w-20 h-20 bg-gray-900 rounded-full flex items-center justify-center text-white font-bold text-3xl shadow-lg border-4 border-double border-gray-100">
+                        {selectedCert.institutionName ? selectedCert.institutionName.charAt(0) : "U"}
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <h2 className="text-xl font-bold text-gray-800 uppercase tracking-[0.2em] mb-2">{selectedCert.institutionName || "INSTITUTION NAME"}</h2>
+                      <h1 className="text-4xl font-black uppercase tracking-widest text-primary-900 font-serif border-b-2 border-gray-200 pb-4 px-8 inline-block">
+                        Certificate of Completion
+                      </h1>
+                    </div>
+                  </div>
+
+                  {/* Middle: Student Details */}
+                  <div className="text-center space-y-4 py-4 w-full">
+                    <p className="text-xl text-gray-500 italic font-serif">This is to certify that</p>
+
+                    <div className="py-2">
+                      <h3 className="text-6xl font-script text-primary-700 leading-normal px-8 min-w-[500px]">
+                        {selectedCert.studentName}
+                      </h3>
+                    </div>
+
+                    <p className="text-xl text-gray-500 italic font-serif">has successfully completed the course</p>
+
+                    <div className="py-2">
+                      <h4 className="text-3xl font-bold text-gray-900 border-b border-gray-300 inline-block px-12 pb-2">
+                        {selectedCert.courseName}
+                      </h4>
+                    </div>
+
+                    {selectedCert.grade && (
+                      <p className="text-lg text-gray-600 mt-2">
+                        with a grade of <span className="font-bold text-gray-900 text-xl">{selectedCert.grade}</span>
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Bottom: Signature & Date */}
+                  <div className="w-full flex justify-between items-end mt-auto px-12 pt-8 border-t border-gray-100">
+                    <div className="text-center">
+                      <p className="font-bold text-lg text-gray-900">{new Date(selectedCert.issuanceDate).toLocaleDateString()}</p>
+                      <p className="text-xs text-gray-500 uppercase tracking-widest mt-1">Date Issued</p>
+                    </div>
+
+                    {/* QR Code on Certificate */}
+                    <div className="flex flex-col items-center opacity-80">
+                      <QRCodeCanvas
+                        value={JSON.stringify({ hash: selectedCert.certificateHash })}
+                        size={64}
+                        level={"M"}
+                      />
+                      <p className="text-[9px] text-gray-400 mt-1 font-mono">{selectedCert.certificateHash.substring(0, 10)}...</p>
+                    </div>
+
+                    <div className="text-center">
+                      <div className="font-script text-3xl text-gray-800 mb-1">Administrator</div>
+                      <p className="text-xs text-gray-500 uppercase tracking-widest border-t border-gray-400 pt-1 px-4">Signature</p>
+                    </div>
+                  </div>
+
+                  {/* Hash ID Display (Absolute for corner anchor) */}
+                  <div className="absolute left-4 bottom-1 text-[8px] text-gray-300 font-mono">
+                    ID: {selectedCert.certificateHash}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div >
 
   );
