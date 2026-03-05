@@ -275,7 +275,8 @@ router.get("/certificates", async (req, res) => {
 });
 
 // ── REVOKE ───────────────────────────────────────────────────────────────
-router.post("/certificates/revoke", async (req, res) => {
+// 🔒 PROTECTED: Requires admin authentication
+router.post("/certificates/revoke", requireAuth, async (req, res) => {
   try {
     const { certificateHash } = req.body;
     if (!certificateHash) {

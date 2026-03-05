@@ -134,7 +134,7 @@ export default function History() {
                         >
                           <ExternalLink size={16} />
                         </a>
-                        {c.isValid && (
+                        {c.isValid && account && c.issuerAddress && account.toLowerCase() === c.issuerAddress.toLowerCase() && (
                           <button
                             onClick={() => handleRevoke(c)}
                             disabled={revoking === c.certificateHash}
@@ -176,7 +176,7 @@ export default function History() {
                     <a href={`https://sepolia.etherscan.io/tx/${c.txHash}`} target="_blank" rel="noopener noreferrer" className="text-primary-400">
                       <ExternalLink size={16} />
                     </a>
-                    {c.isValid && (
+                    {c.isValid && account && c.issuerAddress && account.toLowerCase() === c.issuerAddress.toLowerCase() && (
                       <button onClick={() => handleRevoke(c)} disabled={revoking === c.certificateHash} className="text-red-400 disabled:opacity-50">
                         {revoking === c.certificateHash ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
                       </button>
