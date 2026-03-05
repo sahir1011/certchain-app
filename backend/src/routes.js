@@ -288,7 +288,18 @@ router.post("/certificates/revoke", async (req, res) => {
     const certHashBytes32 = toBytes32(hash);
 
     // On-chain revoke
-    const { txHash } = await blockchain.revokeCertOnChain(certHashBytes32);
+    let txHash = null;
+    try {
+      const result = await blockchain.revokeCertOnChain(certHashBytes32);
+      txHash = result.txHash;
+    } catch (chainErr) {
+      const errMsg = (chainErr.reason || chainErr.message || "").toLowerCase();
+      if (errMsg.includes("already revoked")) {
+        console.log(`[revoke] Certificate ${hash} is already revoked on-chain. Syncing local DB.`);
+      } else {
+        throw chainErr;
+      }
+    }
 
     // Update local cache
     await store.revoke(hash);
