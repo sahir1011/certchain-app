@@ -291,8 +291,7 @@ router.post("/certificates/revoke", async (req, res) => {
     const { txHash } = await blockchain.revokeCertOnChain(certHashBytes32);
 
     // Update local cache
-    const cached = store.get(hash);
-    if (cached) cached.isValid = false;
+    await store.revoke(hash);
 
     res.json({ txHash, message: "Certificate revoked." });
   } catch (e) {

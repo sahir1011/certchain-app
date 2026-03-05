@@ -101,5 +101,13 @@ async function clear() {
   await Certificate.destroy({ truncate: true });
 }
 
-module.exports = { set, get, getAll, getByStudent, size, clear };
+async function revoke(certHash) {
+  try {
+    await Certificate.update({ status: 'revoked' }, { where: { certificateHash: certHash } });
+  } catch (e) {
+    console.error(`[store] Failed to revoke certificate ${certHash}:`, e);
+  }
+}
+
+module.exports = { set, get, getAll, getByStudent, size, clear, revoke };
 
