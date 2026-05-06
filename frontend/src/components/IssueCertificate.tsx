@@ -149,19 +149,19 @@ export default function IssueCertificate() {
   if (issued) {
     return (
       <div className="max-w-4xl mx-auto">
-        <div className="glass-card p-8 text-center space-y-6">
+        <div className="card p-8 text-center space-y-6">
           <div className="flex justify-center">
-            <div className="p-4 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-              <CheckCircle size={48} className="text-emerald-400" />
+            <div className="p-4 rounded-full bg-emerald-50 border border-emerald-200">
+              <CheckCircle size={48} className="text-emerald-600" />
             </div>
           </div>
-          <h2 className="text-2xl font-bold text-white">Certificate Issued Successfully</h2>
-          <p className="text-gray-400">The certificate has been stored on the Ethereum Sepolia blockchain.</p>
+          <h2 className="text-2xl font-bold text-surface-900">Certificate Issued Successfully</h2>
+          <p className="text-surface-500">The certificate has been stored on the Ethereum Sepolia blockchain.</p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left mt-8">
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-white border-b border-white/10 pb-2">Transaction Details</h3>
-              <div className="bg-white/[.04] rounded-xl p-5 space-y-3">
+              <h3 className="text-lg font-semibold text-surface-900 border-b border-surface-200 pb-2">Transaction Details</h3>
+              <div className="bg-surface-50 rounded-xl p-5 space-y-3">
                 <Row label="Certificate Hash" value={issued.certificateHash} mono />
                 <Row label="Transaction Hash" value={issued.txHash} mono />
                 <Row label="Block Number" value={String(issued.blockNumber)} />
@@ -169,8 +169,8 @@ export default function IssueCertificate() {
                 <Row label="Course" value={issued.courseName} />
                 {issued.imageIpfsHash && (
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                    <span className="text-gray-500 text-sm">IPFS Image</span>
-                    <a href={`https://gateway.pinata.cloud/ipfs/${issued.imageIpfsHash}`} target="_blank" rel="noopener noreferrer" className="text-primary-400 text-xs hover:underline flex items-center gap-1">
+                    <span className="text-surface-400 text-sm">IPFS Image</span>
+                    <a href={`https://gateway.pinata.cloud/ipfs/${issued.imageIpfsHash}`} target="_blank" rel="noopener noreferrer" className="text-primary-600 text-xs hover:underline flex items-center gap-1">
                       View on IPFS <ExternalLink size={10} />
                     </a>
                   </div>
@@ -189,8 +189,8 @@ export default function IssueCertificate() {
               </div>
             </div>
 
-            <div className="flex flex-col items-center justify-center space-y-4 bg-white/[.02] rounded-xl p-6 border border-white/5">
-              <h3 className="text-lg font-semibold text-white w-full text-center border-b border-white/10 pb-2 mb-2">QR Verification</h3>
+            <div className="flex flex-col items-center justify-center space-y-4 bg-surface-50 rounded-xl p-6 border border-surface-100">
+              <h3 className="text-lg font-semibold text-surface-900 w-full text-center border-b border-surface-200 pb-2 mb-2">QR Verification</h3>
               <div className="bg-white p-4 rounded-xl">
                 <QRCodeCanvas
                   id="cert-qr"
@@ -230,34 +230,34 @@ export default function IssueCertificate() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-xl bg-primary-500/10">
-            <FileText size={28} className="text-primary-400" />
+          <div className="p-3 rounded-xl bg-primary-50">
+            <FileText size={28} className="text-primary-600" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-white">Issue Certificate</h2>
-            <p className="text-gray-400 text-sm">Fill details and generate certificate.</p>
+            <h2 className="text-2xl font-bold text-surface-900">Issue Certificate</h2>
+            <p className="text-surface-500 text-sm">Fill details and generate certificate.</p>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex bg-white/5 p-1 rounded-lg">
+        <div className="flex bg-surface-100 p-1 rounded-lg">
           <button
             onClick={() => setActiveTab("standard")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeTab === "standard" ? "bg-primary-500 text-white shadow-lg" : "text-gray-400 hover:text-white"
+            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeTab === "standard" ? "bg-primary-500 text-surface-900 shadow-lg" : "text-surface-500 hover:text-surface-900"
               }`}
           >
             <LayoutTemplate size={16} /> Standard Template
           </button>
           <button
             onClick={() => setActiveTab("custom")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeTab === "custom" ? "bg-primary-500 text-white shadow-lg" : "text-gray-400 hover:text-white"
+            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeTab === "custom" ? "bg-primary-500 text-surface-900 shadow-lg" : "text-surface-500 hover:text-surface-900"
               }`}
           >
             <ImageIcon size={16} /> Custom Template
           </button>
           <button
             onClick={() => setActiveTab("bulk")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeTab === "bulk" ? "bg-primary-500 text-white shadow-lg" : "text-gray-400 hover:text-white"
+            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeTab === "bulk" ? "bg-primary-500 text-surface-900 shadow-lg" : "text-surface-500 hover:text-surface-900"
               }`}
           >
             <Upload size={16} /> Bulk Issue
@@ -283,14 +283,14 @@ export default function IssueCertificate() {
 
               {/* Error */}
               {error && (
-                <div className="glass-card p-4 flex items-center gap-3 border-red-500/20 bg-red-500/[.04]">
-                  <AlertCircle size={18} className="text-red-400 flex-shrink-0" />
-                  <p className="text-red-300 text-sm">{error}</p>
+                <div className="card p-4 flex items-center gap-3 border-red-200 bg-red-50">
+                  <AlertCircle size={18} className="text-red-600 flex-shrink-0" />
+                  <p className="text-red-700 text-sm">{error}</p>
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="glass-card p-6 space-y-4">
-                <h3 className="text-lg font-medium text-white mb-4">Certificate Details</h3>
+              <form onSubmit={handleSubmit} className="card p-6 space-y-4">
+                <h3 className="text-lg font-medium text-surface-900 mb-4">Certificate Details</h3>
                 <Field label="Student Name *" name="studentName" value={form.studentName} onChange={handleChange} placeholder="John Doe" required />
                 <Field label="Student ID *" name="studentId" value={form.studentId} onChange={handleChange} placeholder="STU-2024-001" required />
 
@@ -301,8 +301,8 @@ export default function IssueCertificate() {
                 <Field label="Issuance Date *" name="issuanceDate" type="date" value={form.issuanceDate} onChange={handleChange} required />
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1.5">Grade</label>
-                  <select name="grade" value={form.grade} onChange={handleChange} className="input-field bg-white/[.05]">
+                  <label className="block text-sm font-medium text-surface-600 mb-1.5">Grade</label>
+                  <select name="grade" value={form.grade} onChange={handleChange} className="input-field bg-white">
                     <option value="" className="bg-blockchain-card">Select grade…</option>
                     {["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D", "F", "Pass", "Honors"].map((g) => (
                       <option key={g} value={g} className="bg-blockchain-card">{g}</option>
@@ -312,11 +312,11 @@ export default function IssueCertificate() {
 
                 {/* Custom Template Upload */}
                 {activeTab === "custom" && !customTemplate && (
-                  <div className="pt-2 border-t border-white/10 mt-4">
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Upload Template Info</label>
-                    <label className="flex items-center justify-center p-4 border-2 border-dashed border-gray-600 rounded-xl cursor-pointer hover:border-primary-500 hover:bg-white/5 transition-all group">
+                  <div className="pt-2 border-t border-surface-200 mt-4">
+                    <label className="block text-sm font-medium text-surface-600 mb-2">Upload Template Info</label>
+                    <label className="flex items-center justify-center p-4 border-2 border-dashed border-surface-300 rounded-xl cursor-pointer hover:border-primary-500 hover:bg-surface-100 transition-all group">
                       <input type="file" accept="image/*" onChange={handleTemplateUpload} className="hidden" />
-                      <div className="flex flex-col items-center gap-2 text-gray-400 group-hover:text-primary-400">
+                      <div className="flex flex-col items-center gap-2 text-surface-500 group-hover:text-primary-600">
                         <Upload size={24} />
                         <span className="text-xs">Click to upload background image</span>
                       </div>
@@ -324,14 +324,14 @@ export default function IssueCertificate() {
                   </div>
                 )}
                 {activeTab === "custom" && customTemplate && (
-                  <div className="pt-2 border-t border-white/10 mt-4">
+                  <div className="pt-2 border-t border-surface-200 mt-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-300">Template Active</span>
-                      <button type="button" onClick={removeTemplate} className="text-red-400 hover:text-red-300 text-xs flex items-center gap-1">
+                      <span className="text-sm font-medium text-surface-600">Template Active</span>
+                      <button type="button" onClick={removeTemplate} className="text-red-600 hover:text-red-700 text-xs flex items-center gap-1">
                         <X size={14} /> Remove
                       </button>
                     </div>
-                    <p className="text-xs text-gray-500 mt-2 flex items-center gap-1"><Move size={12} /> Drag text on preview to position.</p>
+                    <p className="text-xs text-surface-400 mt-2 flex items-center gap-1"><Move size={12} /> Drag text on preview to position.</p>
                   </div>
                 )}
 
@@ -351,13 +351,13 @@ export default function IssueCertificate() {
         {/* Right Column: Preview */}
         {/* Hide preview column mostly when in bulk mode, OR show it for the processing step */}
         <div className={`lg:col-span-8 ${activeTab === "bulk" ? "opacity-50 pointer-events-none absolute -z-10 h-0 w-0 overflow-hidden" : ""}`}>
-          <div className="glass-card p-6 h-full flex flex-col">
+          <div className="card p-6 h-full flex flex-col">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-medium text-white">Live Preview</h3>
-              <span className="text-xs text-gray-500 uppercase tracking-widest">{activeTab} Mode</span>
+              <h3 className="text-lg font-medium text-surface-900">Live Preview</h3>
+              <span className="text-xs text-surface-400 uppercase tracking-widest">{activeTab} Mode</span>
             </div>
 
-            <div className="flex-1 bg-gray-900/50 rounded-xl border border-white/10 p-4 overflow-auto flex items-center justify-center min-h-[500px]">
+            <div className="flex-1 bg-surface-50 rounded-xl border border-surface-200 p-4 overflow-auto flex items-center justify-center min-h-[500px]">
               {/* Certificate Container */}
               <div
                 ref={certificateRef}
@@ -387,7 +387,7 @@ export default function IssueCertificate() {
                         {/* Top: Institution */}
                         <div className="text-center mt-4">
                           <div className="flex justify-center mb-2">
-                            <div className="w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-lg border-4 border-double border-gray-100">
+                            <div className="w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center text-surface-900 font-bold text-2xl shadow-lg border-4 border-double border-gray-100">
                               {form.institutionName ? form.institutionName.charAt(0) : "U"}
                             </div>
                           </div>
@@ -401,7 +401,7 @@ export default function IssueCertificate() {
 
                         {/* Middle: Student Details */}
                         <div className="text-center space-y-2 py-2 w-full flex-1 flex flex-col justify-center">
-                          <p className="text-lg text-gray-500 italic font-serif">This is to certify that</p>
+                          <p className="text-lg text-surface-400 italic font-serif">This is to certify that</p>
 
                           <div className="py-1">
                             <h3 className="text-5xl font-script text-primary-700 leading-normal px-8 min-w-[500px]">
@@ -409,7 +409,7 @@ export default function IssueCertificate() {
                             </h3>
                           </div>
 
-                          <p className="text-lg text-gray-500 italic font-serif">has successfully completed the course</p>
+                          <p className="text-lg text-surface-400 italic font-serif">has successfully completed the course</p>
 
                           <div className="py-1">
                             <h4 className="text-2xl font-bold text-gray-900 border-b border-gray-300 inline-block px-12 pb-1">
@@ -428,16 +428,16 @@ export default function IssueCertificate() {
                         <div className="w-full flex justify-between items-end px-8 pb-4 border-t border-gray-100 w-full pt-4">
                           <div className="text-center">
                             <p className="font-bold text-base text-gray-900">{form.issuanceDate}</p>
-                            <p className="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Date Issued</p>
+                            <p className="text-[10px] text-surface-400 uppercase tracking-widest mt-1">Date Issued</p>
                           </div>
 
                           <div className="text-center px-4 opacity-70">
-                            <p className="text-[8px] text-gray-400 font-mono">ID: 0x... (Generated on Issue)</p>
+                            <p className="text-[8px] text-surface-500 font-mono">ID: 0x... (Generated on Issue)</p>
                           </div>
 
                           <div className="text-center">
                             <div className="font-script text-2xl text-gray-800 mb-1">Administrator</div>
-                            <p className="text-[10px] text-gray-500 uppercase tracking-widest border-t border-gray-400 pt-1 px-4">Signature</p>
+                            <p className="text-[10px] text-surface-400 uppercase tracking-widest border-t border-gray-400 pt-1 px-4">Signature</p>
                           </div>
                         </div>
 
@@ -502,7 +502,7 @@ export default function IssueCertificate() {
                         <div className="absolute top-4 right-4 z-20 opacity-0 group-hover/canvas:opacity-100 transition-opacity">
                           <button
                             onClick={removeTemplate}
-                            className="bg-black/50 hover:bg-red-500/80 text-white p-2 rounded-full backdrop-blur-sm transition-all"
+                            className="bg-surface-600 hover:bg-red-500 text-surface-900 p-2 rounded-full backdrop-blur-sm transition-all"
                             title="Remove Template"
                           >
                             <X size={20} />
@@ -510,7 +510,7 @@ export default function IssueCertificate() {
                         </div>
                       </>
                     ) : (
-                      <div className="text-center text-gray-400 p-8 border-2 border-dashed border-gray-300 rounded-xl">
+                      <div className="text-center text-surface-500 p-8 border-2 border-dashed border-gray-300 rounded-xl">
                         <ImageIcon size={48} className="mx-auto mb-4 opacity-50" />
                         <p>Upload a custom template image from the left panel.</p>
                       </div>
@@ -519,7 +519,7 @@ export default function IssueCertificate() {
                 )}
               </div>
             </div>
-            <p className="text-center text-gray-500 text-xs mt-4">
+            <p className="text-center text-surface-400 text-xs mt-4">
               Preview generates a High Quality PDF. Ensure details are correct before issuing.
             </p>
           </div>
@@ -632,9 +632,9 @@ function BulkIssueModule({ isConnected, isCorrectNetwork, account, certificateRe
   };
 
   return (
-    <div className="lg:col-span-12 glass-card p-6 space-y-6">
+    <div className="lg:col-span-12 card p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-xl font-bold text-white">Bulk Issuance</h3>
+        <h3 className="text-xl font-bold text-surface-900">Bulk Issuance</h3>
         <a href="#" onClick={(e) => {
           e.preventDefault();
           const csvContent = "StudentName,StudentID,Course,Institution,Grade,Email\nAlice Smith,STU001,Math 101,MIT,A,alice@example.com\nBob Jones,STU002,Physics,Harvard,B+,bob@example.com";
@@ -644,28 +644,28 @@ function BulkIssueModule({ isConnected, isCorrectNetwork, account, certificateRe
           a.href = url;
           a.download = "sample_students.csv";
           a.click();
-        }} className="text-primary-400 text-sm hover:underline flex items-center gap-1">
+        }} className="text-primary-600 text-sm hover:underline flex items-center gap-1">
           <Download size={14} /> Download Sample CSV
         </a>
       </div>
 
       {!csvData.length ? (
-        <div className="border-2 border-dashed border-gray-600 rounded-xl p-10 text-center hover:bg-white/5 transition">
-          <Upload size={48} className="mx-auto text-gray-400 mb-4" />
-          <p className="text-gray-300">Drag and drop your CSV file here, or click to browse</p>
-          <input type="file" accept=".csv" onChange={handleFileUpload} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-500 file:text-white hover:file:bg-primary-600 mt-4 cursor-pointer" />
+        <div className="border-2 border-dashed border-surface-300 rounded-xl p-10 text-center hover:bg-surface-100 transition">
+          <Upload size={48} className="mx-auto text-surface-500 mb-4" />
+          <p className="text-surface-600">Drag and drop your CSV file here, or click to browse</p>
+          <input type="file" accept=".csv" onChange={handleFileUpload} className="block w-full text-sm text-surface-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-500 file:text-surface-900 hover:file:bg-primary-600 mt-4 cursor-pointer" />
         </div>
       ) : (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <p className="text-gray-300">Loaded <strong>{csvData.length}</strong> records from CSV.</p>
-            <button onClick={() => setCsvData([])} className="text-red-400 text-sm hover:underline" disabled={processing}>Clear / Upload New</button>
+            <p className="text-surface-600">Loaded <strong>{csvData.length}</strong> records from CSV.</p>
+            <button onClick={() => setCsvData([])} className="text-red-600 text-sm hover:underline" disabled={processing}>Clear / Upload New</button>
           </div>
 
-          <div className="bg-black/20 rounded-lg p-4 max-h-[200px] overflow-y-auto">
-            <table className="w-full text-left text-xs text-gray-400">
+          <div className="bg-surface-100 rounded-lg p-4 max-h-[200px] overflow-y-auto">
+            <table className="w-full text-left text-xs text-surface-500">
               <thead>
-                <tr className="border-b border-gray-700">
+                <tr className="border-b border-surface-200">
                   <th className="pb-2">Student Name</th>
                   <th className="pb-2">ID</th>
                   <th className="pb-2">Course</th>
@@ -675,7 +675,7 @@ function BulkIssueModule({ isConnected, isCorrectNetwork, account, certificateRe
               </thead>
               <tbody>
                 {csvData.map((row, i) => (
-                  <tr key={i} className="border-b border-gray-800/50">
+                  <tr key={i} className="border-b border-surface-100">
                     <td className="py-1">{row.StudentName}</td>
                     <td className="py-1">{row.StudentID}</td>
                     <td className="py-1">{row.Course}</td>
@@ -692,9 +692,9 @@ function BulkIssueModule({ isConnected, isCorrectNetwork, account, certificateRe
           </div>
 
           {logs.length > 0 && (
-            <div className="bg-black/40 rounded-lg p-4 font-mono text-xs h-[150px] overflow-y-auto space-y-1">
+            <div className="bg-surface-100 rounded-lg p-4 font-mono text-xs h-[150px] overflow-y-auto space-y-1">
               {logs.map((log, i) => (
-                <div key={i} className={log.includes("❌") ? "text-red-400" : log.includes("✅") ? "text-green-400" : "text-gray-400"}>
+                <div key={i} className={log.includes("❌") ? "text-red-600" : log.includes("✅") ? "text-green-400" : "text-surface-500"}>
                   {log}
                 </div>
               ))}
@@ -714,7 +714,7 @@ function BulkIssueModule({ isConnected, isCorrectNetwork, account, certificateRe
 function Field({ label, name, value, onChange, placeholder, type = "text", required }: any) {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-300 mb-1.5">{label}</label>
+      <label className="block text-sm font-medium text-surface-600 mb-1.5">{label}</label>
       <input
         type={type}
         name={name}
@@ -731,8 +731,8 @@ function Field({ label, name, value, onChange, placeholder, type = "text", requi
 function Row({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-      <span className="text-gray-500 text-sm">{label}</span>
-      <span className={`text-gray-200 text-sm ${mono ? "font-mono break-all text-xs" : ""}`}>{value}</span>
+      <span className="text-surface-400 text-sm">{label}</span>
+      <span className={`text-surface-700 text-sm ${mono ? "font-mono break-all text-xs" : ""}`}>{value}</span>
     </div>
   );
 }

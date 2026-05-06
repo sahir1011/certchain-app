@@ -110,14 +110,14 @@ export default function StudentDashboard() {
                 {/* Header */}
                 <div className="mb-8 flex items-center justify-between">
                     <div>
-                        <h1 className="text-4xl font-bold text-white mb-2">My Certificates</h1>
-                        <p className="text-gray-300">
-                            Welcome back, <span className="font-semibold text-purple-400">{studentId}</span>
+                        <h1 className="text-4xl font-bold text-surface-900 mb-2">My Certificates</h1>
+                        <p className="text-surface-600">
+                            Welcome back, <span className="font-semibold text-purple-600">{studentId}</span>
                         </p>
                     </div>
                     <button
                         onClick={handleLogout}
-                        className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white transition-all"
+                        className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-surface-100 border border-surface-200 rounded-xl text-surface-900 transition-all"
                     >
                         <LogOut className="w-4 h-4" />
                         Logout
@@ -127,24 +127,24 @@ export default function StudentDashboard() {
                 {/* Loading State */}
                 {loading && (
                     <div className="flex items-center justify-center py-20">
-                        <Loader2 className="w-8 h-8 text-purple-400 animate-spin" />
+                        <Loader2 className="w-8 h-8 text-purple-600 animate-spin" />
                     </div>
                 )}
 
                 {/* Error State */}
                 {error && !loading && (
-                    <div className="bg-red-500/20 border border-red-500/50 rounded-xl p-6 text-center">
-                        <XCircle className="w-12 h-12 text-red-400 mx-auto mb-3" />
-                        <p className="text-red-200">{error}</p>
+                    <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
+                        <XCircle className="w-12 h-12 text-red-600 mx-auto mb-3" />
+                        <p className="text-red-700">{error}</p>
                     </div>
                 )}
 
                 {/* Empty State */}
                 {!loading && !error && certificates.length === 0 && (
-                    <div className="bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 p-12 text-center">
-                        <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-2xl font-bold text-white mb-2">No Certificates Found</h3>
-                        <p className="text-gray-300">
+                    <div className="bg-white  rounded-xl border border-surface-200 p-12 text-center">
+                        <FileText className="w-16 h-16 text-surface-400 mx-auto mb-4" />
+                        <h3 className="text-2xl font-bold text-surface-900 mb-2">No Certificates Found</h3>
+                        <p className="text-surface-600">
                             You don't have any certificates yet. Contact your institution if you believe this is an error.
                         </p>
                     </div>
@@ -156,33 +156,33 @@ export default function StudentDashboard() {
                         {certificates.map((cert) => (
                             <div
                                 key={cert.certificateHash}
-                                className="bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl p-6 hover:bg-white/15 transition-all"
+                                className="bg-white  rounded-xl border border-surface-200 shadow-card p-6 hover:bg-surface-50 transition-all"
                             >
                                 <div className="flex items-start justify-between mb-4">
                                     <div className="flex items-start gap-4">
-                                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0">
-                                            <Award className="w-6 h-6 text-white" />
+                                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center flex-shrink-0">
+                                            <Award className="w-6 h-6 text-surface-900" />
                                         </div>
                                         <div>
-                                            <h3 className="text-2xl font-bold text-white mb-1">{cert.courseName}</h3>
-                                            <p className="text-gray-300">{cert.studentName}</p>
+                                            <h3 className="text-2xl font-bold text-surface-900 mb-1">{cert.courseName}</h3>
+                                            <p className="text-surface-600">{cert.studentName}</p>
                                         </div>
                                     </div>
 
                                     {/* Status Badge */}
                                     <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${cert.isValid
-                                        ? "bg-emerald-500/20 border border-emerald-500/50"
-                                        : "bg-red-500/20 border border-red-500/50"
+                                        ? "bg-emerald-50 border border-emerald-200"
+                                        : "bg-red-50 border border-red-200"
                                         }`}>
                                         {cert.isValid ? (
                                             <>
-                                                <CheckCircle className="w-4 h-4 text-emerald-400" />
-                                                <span className="text-emerald-300 font-semibold text-sm">Valid</span>
+                                                <CheckCircle className="w-4 h-4 text-emerald-600" />
+                                                <span className="text-emerald-700 font-semibold text-sm">Valid</span>
                                             </>
                                         ) : (
                                             <>
-                                                <XCircle className="w-4 h-4 text-red-400" />
-                                                <span className="text-red-300 font-semibold text-sm">Revoked</span>
+                                                <XCircle className="w-4 h-4 text-red-600" />
+                                                <span className="text-red-700 font-semibold text-sm">Revoked</span>
                                             </>
                                         )}
                                     </div>
@@ -190,37 +190,37 @@ export default function StudentDashboard() {
 
                                 {/* Certificate Details */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                    <div className="flex items-center gap-3 text-gray-300">
-                                        <Building className="w-5 h-5 text-purple-400" />
+                                    <div className="flex items-center gap-3 text-surface-600">
+                                        <Building className="w-5 h-5 text-purple-600" />
                                         <div>
-                                            <p className="text-xs text-gray-400">Institution</p>
+                                            <p className="text-xs text-surface-400">Institution</p>
                                             <p className="font-medium">{cert.institutionName}</p>
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center gap-3 text-gray-300">
-                                        <Calendar className="w-5 h-5 text-purple-400" />
+                                    <div className="flex items-center gap-3 text-surface-600">
+                                        <Calendar className="w-5 h-5 text-purple-600" />
                                         <div>
-                                            <p className="text-xs text-gray-400">Issued On</p>
+                                            <p className="text-xs text-surface-400">Issued On</p>
                                             <p className="font-medium">{new Date(cert.issuanceDate).toLocaleDateString()}</p>
                                         </div>
                                     </div>
 
                                     {cert.grade && (
-                                        <div className="flex items-center gap-3 text-gray-300">
-                                            <GraduationCap className="w-5 h-5 text-purple-400" />
+                                        <div className="flex items-center gap-3 text-surface-600">
+                                            <GraduationCap className="w-5 h-5 text-purple-600" />
                                             <div>
-                                                <p className="text-xs text-gray-400">Grade</p>
+                                                <p className="text-xs text-surface-400">Grade</p>
                                                 <p className="font-medium">{cert.grade}</p>
                                             </div>
                                         </div>
                                     )}
 
                                     {cert.expiryDate && (
-                                        <div className="flex items-center gap-3 text-gray-300">
-                                            <Calendar className="w-5 h-5 text-purple-400" />
+                                        <div className="flex items-center gap-3 text-surface-600">
+                                            <Calendar className="w-5 h-5 text-purple-600" />
                                             <div>
-                                                <p className="text-xs text-gray-400">Expires On</p>
+                                                <p className="text-xs text-surface-400">Expires On</p>
                                                 <p className="font-medium">{new Date(cert.expiryDate).toLocaleDateString()}</p>
                                             </div>
                                         </div>
@@ -228,9 +228,9 @@ export default function StudentDashboard() {
                                 </div>
 
                                 {/* Certificate Hash */}
-                                <div className="mb-4 p-3 bg-black/20 rounded-xl">
-                                    <p className="text-xs text-gray-400 mb-1">Certificate Hash</p>
-                                    <p className="text-sm text-gray-300 font-mono break-all">{cert.certificateHash}</p>
+                                <div className="mb-4 p-3 bg-surface-100 rounded-xl">
+                                    <p className="text-xs text-surface-400 mb-1">Certificate Hash</p>
+                                    <p className="text-sm text-surface-600 font-mono break-all">{cert.certificateHash}</p>
                                 </div>
 
                                 {/* Actions */}
@@ -238,7 +238,7 @@ export default function StudentDashboard() {
                                     <button
                                         onClick={() => setSelectedCert(cert)}
                                         disabled={isGeneratingPdf}
-                                        className="flex items-center gap-2 px-4 py-2 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/50 rounded-xl text-emerald-300 transition-all text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="flex items-center gap-2 px-4 py-2 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl text-emerald-700 transition-all text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         {isGeneratingPdf && selectedCert?.certificateHash === cert.certificateHash ? (
                                             <Loader2 className="w-4 h-4 animate-spin" />
@@ -251,7 +251,7 @@ export default function StudentDashboard() {
                                         href={`https://sepolia.etherscan.io/tx/${cert.txHash}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="flex items-center gap-2 px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 rounded-xl text-purple-300 transition-all text-sm font-medium"
+                                        className="flex items-center gap-2 px-4 py-2 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-xl text-purple-700 transition-all text-sm font-medium"
                                     >
                                         <ExternalLink className="w-4 h-4" />
                                         View on Etherscan
@@ -264,23 +264,23 @@ export default function StudentDashboard() {
 
                 {/* Summary */}
                 {!loading && !error && certificates.length > 0 && (
-                    <div className="mt-8 bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 p-6">
+                    <div className="mt-8 bg-white  rounded-xl border border-surface-200 p-6">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
                             <div>
-                                <p className="text-3xl font-bold text-white mb-1">{certificates.length}</p>
-                                <p className="text-gray-300">Total Certificates</p>
+                                <p className="text-3xl font-bold text-surface-900 mb-1">{certificates.length}</p>
+                                <p className="text-surface-600">Total Certificates</p>
                             </div>
                             <div>
-                                <p className="text-3xl font-bold text-emerald-400 mb-1">
+                                <p className="text-3xl font-bold text-emerald-600 mb-1">
                                     {certificates.filter(c => c.isValid).length}
                                 </p>
-                                <p className="text-gray-300">Valid</p>
+                                <p className="text-surface-600">Valid</p>
                             </div>
                             <div>
-                                <p className="text-3xl font-bold text-red-400 mb-1">
+                                <p className="text-3xl font-bold text-red-600 mb-1">
                                     {certificates.filter(c => !c.isValid).length}
                                 </p>
-                                <p className="text-gray-300">Revoked</p>
+                                <p className="text-surface-600">Revoked</p>
                             </div>
                         </div>
                     </div>
@@ -292,7 +292,7 @@ export default function StudentDashboard() {
                 <div style={{ position: "fixed", left: "-10000px", top: 0 }}>
                     <div
                         ref={certificateRef}
-                        className="relative bg-white text-black shadow-2xl mx-auto overflow-hidden"
+                        className="relative bg-white text-black shadow-card mx-auto overflow-hidden"
                         style={{
                             width: "800px",
                             height: "600px",
@@ -313,7 +313,7 @@ export default function StudentDashboard() {
                                     {/* Top: Institution */}
                                     <div className="text-center">
                                         <div className="flex justify-center mb-4">
-                                            <div className="w-20 h-20 bg-gray-900 rounded-full flex items-center justify-center text-white font-bold text-3xl shadow-lg border-4 border-double border-gray-100">
+                                            <div className="w-20 h-20 bg-gray-900 rounded-full flex items-center justify-center text-surface-900 font-bold text-3xl shadow-lg border-4 border-double border-gray-100">
                                                 {selectedCert.institutionName ? selectedCert.institutionName.charAt(0) : "U"}
                                             </div>
                                         </div>
@@ -364,7 +364,7 @@ export default function StudentDashboard() {
                                                 size={64}
                                                 level={"M"}
                                             />
-                                            <p className="text-[9px] text-gray-400 mt-1 font-mono">{selectedCert.certificateHash.substring(0, 10)}...</p>
+                                            <p className="text-[9px] text-surface-400 mt-1 font-mono">{selectedCert.certificateHash.substring(0, 10)}...</p>
                                         </div>
 
                                         <div className="text-center">
@@ -374,7 +374,7 @@ export default function StudentDashboard() {
                                     </div>
 
                                     {/* Hash ID Display (Absolute for corner anchor) */}
-                                    <div className="absolute left-4 bottom-1 text-[8px] text-gray-300 font-mono">
+                                    <div className="absolute left-4 bottom-1 text-[8px] text-surface-600 font-mono">
                                         ID: {selectedCert.certificateHash}
                                     </div>
                                 </div>

@@ -47,7 +47,7 @@ export default function History() {
     setError(null);
     try {
       await revokeCertificate(cert.certificateHash, account);
-      await fetchCerts(); // refresh
+      await fetchCerts();
     } catch (e: any) {
       setError(e?.response?.data?.message || "Revocation failed.");
     }
@@ -56,51 +56,40 @@ export default function History() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="p-3 rounded-xl bg-purple-500/10">
-          <Clock size={28} className="text-purple-400" />
+        <div className="p-2.5 rounded-lg bg-purple-50">
+          <Clock size={22} className="text-purple-600" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-white">Certificate History</h2>
-          <p className="text-gray-400 text-sm">All certificates issued on-chain. You can search and revoke here.</p>
+          <h2 className="text-xl font-semibold text-surface-900">Certificate History</h2>
+          <p className="text-surface-500 text-sm">All certificates issued on-chain. You can search and revoke here.</p>
         </div>
       </div>
 
-      {/* Search */}
       <div className="relative">
-        <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" />
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search by name, ID, course, institution, or hash…"
-          className="input-field pl-10"
-        />
+        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-400" />
+        <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search by name, ID, course, institution, or hash…" className="input-field pl-10" />
       </div>
 
-      {/* Error */}
       {error && (
-        <div className="glass-card p-4 flex items-center gap-3 border-red-500/20 bg-red-500/[.04]">
-          <AlertCircle size={18} className="text-red-400 flex-shrink-0" />
-          <p className="text-red-300 text-sm">{error}</p>
+        <div className="p-3 flex items-center gap-3 bg-red-50 border border-red-200 rounded-lg">
+          <AlertCircle size={16} className="text-red-600 flex-shrink-0" />
+          <p className="text-red-700 text-sm">{error}</p>
         </div>
       )}
 
-      {/* Table / Cards */}
       {loading ? (
         <div className="flex justify-center py-16">
-          <Loader2 size={32} className="animate-spin text-primary-400" />
+          <Loader2 size={28} className="animate-spin text-primary-600" />
         </div>
       ) : filtered.length === 0 ? (
-        <div className="glass-card p-10 text-center text-gray-500">No certificates found.</div>
+        <div className="card p-10 text-center text-surface-500">No certificates found.</div>
       ) : (
         <>
-          {/* Desktop table */}
-          <div className="hidden lg:block glass-card overflow-hidden">
+          <div className="hidden lg:block card overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-white/[.08] text-gray-500 uppercase text-xs tracking-wider">
+                <tr className="border-b border-surface-200 text-surface-500 uppercase text-xs tracking-wider bg-surface-50">
                   <th className="text-left p-4 font-semibold">Student</th>
                   <th className="text-left p-4 font-semibold">Course</th>
                   <th className="text-left p-4 font-semibold">Institution</th>
@@ -112,15 +101,15 @@ export default function History() {
               </thead>
               <tbody>
                 {filtered.map((c) => (
-                  <tr key={c.certificateHash} className="border-b border-white/[.04] hover:bg-white/[.03] transition-colors">
+                  <tr key={c.certificateHash} className="border-b border-surface-100 hover:bg-surface-50 transition-colors">
                     <td className="p-4">
-                      <p className="text-white font-medium">{c.studentName}</p>
-                      <p className="text-gray-500 text-xs font-mono">{c.studentId}</p>
+                      <p className="text-surface-900 font-medium">{c.studentName}</p>
+                      <p className="text-surface-400 text-xs font-mono">{c.studentId}</p>
                     </td>
-                    <td className="p-4 text-gray-300">{c.courseName}</td>
-                    <td className="p-4 text-gray-300">{c.institutionName}</td>
-                    <td className="p-4 text-gray-300">{c.grade || "—"}</td>
-                    <td className="p-4 text-gray-400 text-xs">{c.issuanceDate}</td>
+                    <td className="p-4 text-surface-700">{c.courseName}</td>
+                    <td className="p-4 text-surface-700">{c.institutionName}</td>
+                    <td className="p-4 text-surface-700">{c.grade || "—"}</td>
+                    <td className="p-4 text-surface-500 text-xs">{c.issuanceDate}</td>
                     <td className="p-4">
                       <span className={c.isValid ? "badge-valid" : "badge-invalid"}>
                         {c.isValid ? "✓ Valid" : "✕ Revoked"}
@@ -128,21 +117,12 @@ export default function History() {
                     </td>
                     <td className="p-4">
                       <div className="flex items-center gap-2 justify-center">
-                        <a
-                          href={`https://sepolia.etherscan.io/tx/${c.txHash}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-primary-400 hover:text-primary-300 transition-colors"
-                        >
-                          <ExternalLink size={16} />
+                        <a href={`https://sepolia.etherscan.io/tx/${c.txHash}`} target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700 transition-colors">
+                          <ExternalLink size={15} />
                         </a>
                         {c.isValid && isAdminAuthenticated && (
-                          <button
-                            onClick={() => handleRevoke(c)}
-                            disabled={revoking === c.certificateHash}
-                            className="text-red-400 hover:text-red-300 transition-colors disabled:opacity-50"
-                          >
-                            {revoking === c.certificateHash ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
+                          <button onClick={() => handleRevoke(c)} disabled={revoking === c.certificateHash} className="text-red-500 hover:text-red-600 transition-colors disabled:opacity-50">
+                            {revoking === c.certificateHash ? <Loader2 size={15} className="animate-spin" /> : <Trash2 size={15} />}
                           </button>
                         )}
                       </div>
@@ -153,34 +133,33 @@ export default function History() {
             </table>
           </div>
 
-          {/* Mobile cards */}
           <div className="lg:hidden space-y-3">
             {filtered.map((c) => (
-              <div key={c.certificateHash} className="glass-card p-4 space-y-3">
+              <div key={c.certificateHash} className="card p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-white font-semibold">{c.studentName}</p>
-                    <p className="text-gray-500 text-xs font-mono">{c.studentId}</p>
+                    <p className="text-surface-900 font-medium">{c.studentName}</p>
+                    <p className="text-surface-400 text-xs font-mono">{c.studentId}</p>
                   </div>
                   <span className={c.isValid ? "badge-valid" : "badge-invalid"}>
                     {c.isValid ? "✓ Valid" : "✕ Revoked"}
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div><p className="text-gray-500 text-xs">Course</p><p className="text-gray-300">{c.courseName}</p></div>
-                  <div><p className="text-gray-500 text-xs">Grade</p><p className="text-gray-300">{c.grade || "—"}</p></div>
-                  <div><p className="text-gray-500 text-xs">Institution</p><p className="text-gray-300">{c.institutionName}</p></div>
-                  <div><p className="text-gray-500 text-xs">Date</p><p className="text-gray-300">{c.issuanceDate}</p></div>
+                  <div><p className="text-surface-400 text-xs">Course</p><p className="text-surface-700">{c.courseName}</p></div>
+                  <div><p className="text-surface-400 text-xs">Grade</p><p className="text-surface-700">{c.grade || "—"}</p></div>
+                  <div><p className="text-surface-400 text-xs">Institution</p><p className="text-surface-700">{c.institutionName}</p></div>
+                  <div><p className="text-surface-400 text-xs">Date</p><p className="text-surface-700">{c.issuanceDate}</p></div>
                 </div>
-                <div className="flex items-center justify-between pt-2 border-t border-white/[.06]">
-                  <p className="text-gray-500 text-xs font-mono truncate mr-2">{c.certificateHash.slice(0, 20)}…</p>
+                <div className="flex items-center justify-between pt-2 border-t border-surface-100">
+                  <p className="text-surface-400 text-xs font-mono truncate mr-2">{c.certificateHash.slice(0, 20)}…</p>
                   <div className="flex gap-2">
-                    <a href={`https://sepolia.etherscan.io/tx/${c.txHash}`} target="_blank" rel="noopener noreferrer" className="text-primary-400">
-                      <ExternalLink size={16} />
+                    <a href={`https://sepolia.etherscan.io/tx/${c.txHash}`} target="_blank" rel="noopener noreferrer" className="text-primary-600">
+                      <ExternalLink size={15} />
                     </a>
                     {c.isValid && isAdminAuthenticated && (
-                      <button onClick={() => handleRevoke(c)} disabled={revoking === c.certificateHash} className="text-red-400 disabled:opacity-50">
-                        {revoking === c.certificateHash ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
+                      <button onClick={() => handleRevoke(c)} disabled={revoking === c.certificateHash} className="text-red-500 disabled:opacity-50">
+                        {revoking === c.certificateHash ? <Loader2 size={15} className="animate-spin" /> : <Trash2 size={15} />}
                       </button>
                     )}
                   </div>
@@ -189,8 +168,7 @@ export default function History() {
             ))}
           </div>
 
-          {/* Count */}
-          <p className="text-gray-500 text-sm text-center">Showing {filtered.length} of {certs.length} certificates</p>
+          <p className="text-surface-400 text-sm text-center">Showing {filtered.length} of {certs.length} certificates</p>
         </>
       )}
     </div>

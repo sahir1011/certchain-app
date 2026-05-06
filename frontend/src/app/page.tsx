@@ -21,10 +21,9 @@ function HomeContent() {
   const { isAuthenticated: isStudentAuthenticated } = useStudent();
 
   return (
-    <div className="min-h-screen relative overflow-x-hidden">
-      <Background />
-      <div className="relative z-10">
-        <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+    <div className="min-h-screen bg-surface-50">
+      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <div>
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {activeTab === "dashboard" && <Dashboard setActiveTab={setActiveTab} />}
           {activeTab === "issue" && <IssueCertificate />}

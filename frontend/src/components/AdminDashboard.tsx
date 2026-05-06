@@ -10,35 +10,33 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Sub-Navigation for Admin */}
-      <div className="flex bg-white/5 p-1 rounded-xl w-fit mx-auto border border-white/10">
+      <div className="flex bg-surface-100 p-1 rounded-lg w-fit mx-auto border border-surface-200">
         <button
           onClick={() => setActiveTab("dashboard")}
-          className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-all ${
-            activeTab === "dashboard" ? "bg-blue-500 text-white shadow-lg" : "text-gray-400 hover:text-white"
+          className={`flex items-center gap-2 px-5 py-2 rounded-md text-sm font-medium transition-all ${
+            activeTab === "dashboard" ? "bg-white text-primary-700 shadow-sm" : "text-surface-500 hover:text-surface-800"
           }`}
         >
-          <LayoutDashboard size={18} /> Admin Panel
+          <LayoutDashboard size={16} /> Admin Panel
         </button>
         <button
           onClick={() => setActiveTab("issue")}
-          className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-all ${
-            activeTab === "issue" ? "bg-primary-500 text-white shadow-lg" : "text-gray-400 hover:text-white"
+          className={`flex items-center gap-2 px-5 py-2 rounded-md text-sm font-medium transition-all ${
+            activeTab === "issue" ? "bg-white text-primary-700 shadow-sm" : "text-surface-500 hover:text-surface-800"
           }`}
         >
-          <PlusCircle size={18} /> Issue Certificate
+          <PlusCircle size={16} /> Issue Certificate
         </button>
         <button
           onClick={() => setActiveTab("history")}
-          className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-all ${
-            activeTab === "history" ? "bg-purple-500 text-white shadow-lg" : "text-gray-400 hover:text-white"
+          className={`flex items-center gap-2 px-5 py-2 rounded-md text-sm font-medium transition-all ${
+            activeTab === "history" ? "bg-white text-primary-700 shadow-sm" : "text-surface-500 hover:text-surface-800"
           }`}
         >
-          <Clock size={18} /> Management / History
+          <Clock size={16} /> Management / History
         </button>
       </div>
 
-      {/* Render the selected component */}
       <div className="mt-6">
         {activeTab === "dashboard" && <AdminPanel />}
         {activeTab === "issue" && <IssueCertificate />}

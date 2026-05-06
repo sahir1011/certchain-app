@@ -50,75 +50,72 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
 
   return (
     <nav
-      className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? "bg-blockchain-dark/90 backdrop-blur-md border-b border-white/[.06]" : "bg-transparent"
+      className={`sticky top-0 z-50 transition-all duration-200 ${scrolled ? "bg-white/95 backdrop-blur-sm shadow-sm border-b border-surface-200" : "bg-white border-b border-surface-100"
         }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-18 py-4">
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-gradient-primary rounded-xl shadow-lg shadow-primary-500/30">
-              <Shield size={22} className="text-white" />
+            <div className="p-2 bg-primary-600 rounded-lg">
+              <Shield size={20} className="text-white" />
             </div>
             <div>
-              <span className="text-xl font-bold text-gradient">CertChain</span>
-              <p className="text-xs text-gray-500 -mt-0.5 tracking-wider uppercase">Blockchain Certificates</p>
+              <span className="text-lg font-bold text-surface-900">CertChain</span>
+              <p className="text-[10px] text-surface-400 -mt-0.5 tracking-wider uppercase">Blockchain Certificates</p>
             </div>
           </div>
 
           {/* Desktop tabs */}
-          <div className="hidden md:flex items-center gap-1 bg-white/[.04] rounded-xl p-1">
+          <div className="hidden md:flex items-center gap-1">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 relative ${activeTab === tab.id
-                  ? "bg-primary-600 text-white shadow-md shadow-primary-600/30"
-                  : "text-gray-400 hover:text-white hover:bg-white/[.06]"
+                  ? "bg-primary-50 text-primary-700"
+                  : "text-surface-500 hover:text-surface-800 hover:bg-surface-100"
                   }`}
               >
                 {tab.label}
                 {tab.id === "admin" && isAdminAuthenticated && (
-                  <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500" />
                 )}
                 {tab.id === "student" && isStudentAuthenticated && (
-                  <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
-                )}
-                {tab.id === "student" && isStudentAuthenticated && (
-                  <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
+                  <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-purple-500" />
                 )}
               </button>
             ))}
           </div>
 
           {/* Wallet button + admin/student status + mobile menu toggle */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {/* Admin status */}
             {isAdminAuthenticated && (
-              <div className="hidden sm:flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-3 py-2">
-                <UserCircle size={16} className="text-emerald-400" />
-                <span className="text-emerald-400 text-sm font-medium">{username}</span>
+              <div className="hidden sm:flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-1.5">
+                <UserCircle size={14} className="text-emerald-600" />
+                <span className="text-emerald-700 text-sm font-medium">{username}</span>
                 <button
                   onClick={handleAdminLogout}
-                  className="ml-1 text-emerald-400 hover:text-emerald-300 transition-colors"
+                  className="ml-1 text-emerald-500 hover:text-emerald-700 transition-colors"
                   title="Logout"
                 >
-                  <LogOut size={14} />
+                  <LogOut size={13} />
                 </button>
               </div>
             )}
 
             {/* Student status */}
             {isStudentAuthenticated && (
-              <div className="hidden sm:flex items-center gap-2 bg-purple-500/10 border border-purple-500/20 rounded-xl px-3 py-2">
-                <GraduationCap size={16} className="text-purple-400" />
-                <span className="text-purple-400 text-sm font-medium">{studentId}</span>
+              <div className="hidden sm:flex items-center gap-2 bg-purple-50 border border-purple-200 rounded-lg px-3 py-1.5">
+                <GraduationCap size={14} className="text-purple-600" />
+                <span className="text-purple-700 text-sm font-medium">{studentId}</span>
                 <button
                   onClick={handleStudentLogout}
-                  className="ml-1 p-1 hover:bg-purple-500/20 rounded-lg transition-colors"
+                  className="ml-1 text-purple-500 hover:text-purple-700 transition-colors"
                   title="Logout"
                 >
-                  <LogOut size={14} className="text-purple-400" />
+                  <LogOut size={13} />
                 </button>
               </div>
             )}
@@ -126,27 +123,27 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
             {/* Wallet */}
             {isConnected ? (
               <div className="flex items-center gap-2">
-                <div className="hidden sm:flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-xl px-3 py-2">
-                  <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
-                  <span className="text-blue-400 text-sm font-medium font-mono">{shortAddr}</span>
+                <div className="hidden sm:flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-lg px-3 py-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                  <span className="text-blue-700 text-sm font-medium font-mono">{shortAddr}</span>
                 </div>
                 <button
                   onClick={disconnectWallet}
-                  className="btn-secondary !px-3 !py-2 text-sm text-red-400 hover:text-red-300 border-red-500/20 hover:border-red-500/40"
+                  className="btn-secondary !px-2.5 !py-1.5 text-sm text-red-500 hover:text-red-600 border-red-200 hover:border-red-300"
                 >
-                  <X size={16} />
+                  <X size={14} />
                 </button>
               </div>
             ) : (
               <button onClick={connectWallet} className="btn-primary !px-4 !py-2 text-sm flex items-center gap-2">
-                <Wallet size={16} />
+                <Wallet size={14} />
                 Connect Wallet
               </button>
             )}
 
             {/* Mobile menu toggle */}
             <button
-              className="md:hidden btn-secondary !px-3 !py-2"
+              className="md:hidden btn-secondary !px-2.5 !py-1.5"
               onClick={() => setMenuOpen(!menuOpen)}
             >
               <Menu size={18} />
@@ -157,15 +154,15 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden border-t border-white/[.06] bg-blockchain-dark/95 backdrop-blur-md">
+        <div className="md:hidden border-t border-surface-200 bg-white">
           <div className="px-4 py-3 flex flex-col gap-1">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => { setActiveTab(tab.id); setMenuOpen(false); }}
                 className={`text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${activeTab === tab.id
-                  ? "bg-primary-600 text-white"
-                  : "text-gray-400 hover:text-white hover:bg-white/[.06]"
+                  ? "bg-primary-50 text-primary-700"
+                  : "text-surface-500 hover:text-surface-800 hover:bg-surface-50"
                   }`}
               >
                 {tab.label}
