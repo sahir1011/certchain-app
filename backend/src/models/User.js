@@ -16,6 +16,11 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    salt: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: '' // or you can remove defaultValue if you want, but for existing it's better
+    },
     role: {
         type: DataTypes.STRING,
         defaultValue: 'admin'
