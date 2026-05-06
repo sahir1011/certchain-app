@@ -86,14 +86,7 @@ export default function IssueCertificate() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
-    if (!isConnected || !account) {
-      setError("Please connect your MetaMask wallet first.");
-      return;
-    }
-    if (!isCorrectNetwork) {
-      setError("Please switch to the Sepolia test network.");
-      return;
-    }
+    // Removed wallet checks to allow issuing via platform wallet
     setLoading(true);
     try {
       // 1. Capture Certificate as Image Blob
@@ -118,7 +111,9 @@ export default function IssueCertificate() {
       formData.append("expiryDate", form.expiryDate);
       formData.append("grade", form.grade);
       formData.append("studentEmail", form.studentEmail);
-      formData.append("issuerAddress", account); // Will be verified on backend too/used for metadata
+      if (account) {
+        formData.append("issuerAddress", account);
+      }
 
       if (imageBlob) {
         formData.append("image", imageBlob, "certificate.png");
@@ -284,15 +279,7 @@ export default function IssueCertificate() {
           <>
             {/* Left Column: Form */}
             <div className="lg:col-span-4 space-y-6">
-              {/* Warning if not connected */}
-              {(!isConnected || !isCorrectNetwork) && (
-                <div className="glass-card p-4 flex items-center gap-3 border-amber-500/20 bg-amber-500/[.04]">
-                  <AlertCircle size={18} className="text-amber-400 flex-shrink-0" />
-                  <p className="text-amber-300 text-sm">
-                    {!isConnected ? "Connect wallet to issue." : "Switch to Sepolia testnet."}
-                  </p>
-                </div>
-              )}
+              {/* Wallet connection no longer strictly required */}
 
               {/* Error */}
               {error && (
@@ -352,7 +339,7 @@ export default function IssueCertificate() {
                   <button type="button" onClick={downloadCertificate} className="btn-secondary w-full flex items-center justify-center gap-2">
                     <Download size={18} /> Download Preview PDF
                   </button>
-                  <button type="submit" disabled={loading || !isConnected} className="btn-primary w-full flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                  <button type="submit" disabled={loading} className="btn-primary w-full flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
                     {loading ? <><Loader2 size={18} className="animate-spin" /> Issuing on Blockchain…</> : "Issue Certificate"}
                   </button>
                 </div>
@@ -569,11 +556,6 @@ function BulkIssueModule({ isConnected, isCorrectNetwork, account, certificateRe
   };
 
   const processBatch = async () => {
-    if (!isConnected || !isCorrectNetwork) {
-      alert("Please connect wallet and switch to Sepolia.");
-      return;
-    }
-
     setProcessing(true);
     setLogs([]);
     setProgress(0);
@@ -629,7 +611,9 @@ function BulkIssueModule({ isConnected, isCorrectNetwork, account, certificateRe
         formData.append("expiryDate", "");
         formData.append("grade", Grade || "");
         formData.append("studentEmail", Email || "");
-        formData.append("issuerAddress", account);
+        if (account) {
+          formData.append("issuerAddress", account);
+        }
         formData.append("image", imageBlob, "certificate.png");
 
         await issueCertificate(formData);

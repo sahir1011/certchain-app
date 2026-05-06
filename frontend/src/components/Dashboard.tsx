@@ -90,7 +90,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
         {!isConnected ? (
           <div className="flex-1 glass-card p-4 flex items-center gap-3 border-amber-500/20 bg-amber-500/[.04]">
             <AlertCircle size={20} className="text-amber-400 flex-shrink-0" />
-            <p className="text-amber-300 text-sm">Connect your MetaMask wallet to issue or revoke certificates.</p>
+            <p className="text-amber-300 text-sm">Connect your MetaMask wallet for manual transactions, or log in as Admin to issue automatically.</p>
           </div>
         ) : !isCorrectNetwork ? (
           <div className="flex-1 glass-card p-4 flex items-center gap-3 border-red-500/20 bg-red-500/[.04]">

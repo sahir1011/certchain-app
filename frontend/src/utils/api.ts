@@ -82,7 +82,7 @@ export async function listCertificates(): Promise<CertificateRecord[]> {
   return data;
 }
 
-export async function revokeCertificate(certificateHash: string, issuerAddress: string): Promise<{ txHash: string }> {
+export async function revokeCertificate(certificateHash: string, issuerAddress?: string | null): Promise<{ txHash: string }> {
   const { data } = await api.post("/api/certificates/revoke", { certificateHash, issuerAddress });
   return data;
 }

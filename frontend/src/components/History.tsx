@@ -3,10 +3,12 @@ import { useState, useEffect, useMemo } from "react";
 import { Clock, Loader2, ExternalLink, Search, Trash2, AlertCircle } from "lucide-react";
 import { listCertificates, revokeCertificate } from "@/utils/api";
 import { useWallet } from "@/utils/walletContext";
+import { useAdmin } from "@/utils/adminContext";
 import type { CertificateRecord } from "@/utils/api";
 
 export default function History() {
-  const { account, isConnected } = useWallet();
+  const { account } = useWallet();
+  const { isAuthenticated: isAdminAuthenticated } = useAdmin();
   const [certs, setCerts] = useState<CertificateRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -39,7 +41,7 @@ export default function History() {
   }, [certs, searchTerm]);
 
   const handleRevoke = async (cert: CertificateRecord) => {
-    if (!isConnected || !account) return alert("Connect your wallet first.");
+    if (!isAdminAuthenticated) return alert("Admin access required to revoke.");
     if (!confirm(`Revoke certificate for ${cert.studentName}? This cannot be undone.`)) return;
     setRevoking(cert.certificateHash);
     setError(null);
@@ -134,7 +136,7 @@ export default function History() {
                         >
                           <ExternalLink size={16} />
                         </a>
-                        {c.isValid && account && c.issuerAddress && account.toLowerCase() === c.issuerAddress.toLowerCase() && (
+                        {c.isValid && isAdminAuthenticated && (
                           <button
                             onClick={() => handleRevoke(c)}
                             disabled={revoking === c.certificateHash}
@@ -176,7 +178,7 @@ export default function History() {
                     <a href={`https://sepolia.etherscan.io/tx/${c.txHash}`} target="_blank" rel="noopener noreferrer" className="text-primary-400">
                       <ExternalLink size={16} />
                     </a>
-                    {c.isValid && account && c.issuerAddress && account.toLowerCase() === c.issuerAddress.toLowerCase() && (
+                    {c.isValid && isAdminAuthenticated && (
                       <button onClick={() => handleRevoke(c)} disabled={revoking === c.certificateHash} className="text-red-400 disabled:opacity-50">
                         {revoking === c.certificateHash ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
                       </button>
