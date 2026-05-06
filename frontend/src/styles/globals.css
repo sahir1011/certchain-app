@@ -12,7 +12,7 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-surface-50 text-surface-800 font-sans antialiased;
+    @apply bg-[#eef2f7] text-surface-800 font-sans antialiased;
   }
 
   /* Custom scrollbar */

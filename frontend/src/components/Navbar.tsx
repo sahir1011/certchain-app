@@ -50,19 +50,19 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
 
   return (
     <nav
-      className={`sticky top-0 z-50 transition-all duration-200 ${scrolled ? "bg-white/95 backdrop-blur-sm shadow-sm border-b border-surface-200" : "bg-white border-b border-surface-100"
+      className={`sticky top-0 z-50 transition-all duration-200 bg-[#1e293b] ${scrolled ? "shadow-lg" : ""
         }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-primary-600 rounded-lg">
+            <div className="p-2 bg-primary-500 rounded-lg">
               <Shield size={20} className="text-white" />
             </div>
             <div>
-              <span className="text-lg font-bold text-surface-900">CertChain</span>
-              <p className="text-[10px] text-surface-400 -mt-0.5 tracking-wider uppercase">Blockchain Certificates</p>
+              <span className="text-lg font-bold text-white">CertChain</span>
+              <p className="text-[10px] text-slate-400 -mt-0.5 tracking-wider uppercase">Blockchain Certificates</p>
             </div>
           </div>
 
@@ -73,8 +73,8 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 relative ${activeTab === tab.id
-                  ? "bg-primary-50 text-primary-700"
-                  : "text-surface-500 hover:text-surface-800 hover:bg-surface-100"
+                  ? "bg-white/15 text-white"
+                  : "text-slate-400 hover:text-white hover:bg-white/10"
                   }`}
               >
                 {tab.label}
@@ -92,12 +92,12 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
           <div className="flex items-center gap-2">
             {/* Admin status */}
             {isAdminAuthenticated && (
-              <div className="hidden sm:flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-1.5">
-                <UserCircle size={14} className="text-emerald-600" />
-                <span className="text-emerald-700 text-sm font-medium">{username}</span>
+              <div className="hidden sm:flex items-center gap-2 bg-emerald-500/15 border border-emerald-500/30 rounded-lg px-3 py-1.5">
+                <UserCircle size={14} className="text-emerald-400" />
+                <span className="text-emerald-300 text-sm font-medium">{username}</span>
                 <button
                   onClick={handleAdminLogout}
-                  className="ml-1 text-emerald-500 hover:text-emerald-700 transition-colors"
+                  className="ml-1 text-emerald-400 hover:text-emerald-200 transition-colors"
                   title="Logout"
                 >
                   <LogOut size={13} />
@@ -107,12 +107,12 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
 
             {/* Student status */}
             {isStudentAuthenticated && (
-              <div className="hidden sm:flex items-center gap-2 bg-purple-50 border border-purple-200 rounded-lg px-3 py-1.5">
-                <GraduationCap size={14} className="text-purple-600" />
-                <span className="text-purple-700 text-sm font-medium">{studentId}</span>
+              <div className="hidden sm:flex items-center gap-2 bg-purple-500/15 border border-purple-500/30 rounded-lg px-3 py-1.5">
+                <GraduationCap size={14} className="text-purple-400" />
+                <span className="text-purple-300 text-sm font-medium">{studentId}</span>
                 <button
                   onClick={handleStudentLogout}
-                  className="ml-1 text-purple-500 hover:text-purple-700 transition-colors"
+                  className="ml-1 text-purple-400 hover:text-purple-200 transition-colors"
                   title="Logout"
                 >
                   <LogOut size={13} />
@@ -123,19 +123,19 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
             {/* Wallet */}
             {isConnected ? (
               <div className="flex items-center gap-2">
-                <div className="hidden sm:flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-lg px-3 py-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                  <span className="text-blue-700 text-sm font-medium font-mono">{shortAddr}</span>
+                <div className="hidden sm:flex items-center gap-2 bg-blue-500/15 border border-blue-500/30 rounded-lg px-3 py-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+                  <span className="text-blue-300 text-sm font-medium font-mono">{shortAddr}</span>
                 </div>
                 <button
                   onClick={disconnectWallet}
-                  className="btn-secondary !px-2.5 !py-1.5 text-sm text-red-500 hover:text-red-600 border-red-200 hover:border-red-300"
+                  className="!px-2.5 !py-1.5 text-sm text-red-400 hover:text-red-300 border border-red-500/30 rounded-lg hover:bg-red-500/10 transition-colors"
                 >
                   <X size={14} />
                 </button>
               </div>
             ) : (
-              <button onClick={connectWallet} className="btn-primary !px-4 !py-2 text-sm flex items-center gap-2">
+              <button onClick={connectWallet} className="bg-primary-500 hover:bg-primary-400 text-white font-medium px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors">
                 <Wallet size={14} />
                 Connect Wallet
               </button>
@@ -143,7 +143,7 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
 
             {/* Mobile menu toggle */}
             <button
-              className="md:hidden btn-secondary !px-2.5 !py-1.5"
+              className="md:hidden text-slate-300 hover:text-white border border-white/20 rounded-lg px-2.5 py-1.5 hover:bg-white/10 transition-colors"
               onClick={() => setMenuOpen(!menuOpen)}
             >
               <Menu size={18} />
@@ -154,15 +154,15 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden border-t border-surface-200 bg-white">
+        <div className="md:hidden border-t border-white/10 bg-[#1e293b]">
           <div className="px-4 py-3 flex flex-col gap-1">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => { setActiveTab(tab.id); setMenuOpen(false); }}
                 className={`text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${activeTab === tab.id
-                  ? "bg-primary-50 text-primary-700"
-                  : "text-surface-500 hover:text-surface-800 hover:bg-surface-50"
+                  ? "bg-white/15 text-white"
+                  : "text-slate-400 hover:text-white hover:bg-white/10"
                   }`}
               >
                 {tab.label}
