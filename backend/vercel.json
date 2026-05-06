@@ -3,13 +3,30 @@
     "builds": [
         {
             "src": "src/index.js",
-            "use": "@vercel/node"
+            "use": "@vercel/node",
+            "config": {
+                "maxLambdaSize": "50mb"
+            }
         }
     ],
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "src/index.js"
+            "dest": "src/index.js",
+            "headers": {
+                "Cache-Control": "no-store"
+            }
+        }
+    ],
+    "functions": {
+        "src/index.js": {
+            "maxDuration": 30
+        }
+    },
+    "crons": [
+        {
+            "path": "/api/ping",
+            "schedule": "*/5 * * * *"
         }
     ]
 }

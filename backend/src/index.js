@@ -39,22 +39,32 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser()); // Parse cookies
 
-// ── bootstrap middleware ────────────────────────────────────
-let isBootstrapped = false;
-app.use(async (req, res, next) => {
-  if (isBootstrapped) return next();
+// ── eager bootstrap (runs once at module load, not per-request) ────────
+const bootstrapPromise = (async () => {
   try {
     console.log("━".repeat(50));
     console.log(" CertChain  –  Initializing serverless connections...");
 
-    await blockchain.init();
+    // Run blockchain and DB init in parallel for faster cold starts
     const { initDB } = require("./models");
-    await initDB();
+    await Promise.all([
+      blockchain.init(),
+      initDB(),
+    ]);
 
-    isBootstrapped = true;
-    next();
+    console.log(" CertChain  –  Ready ✓");
   } catch (error) {
     console.error("Bootstrap error:", error);
+    throw error; // Will reject the promise; caught by middleware below
+  }
+})();
+
+// Wait for bootstrap to complete before handling any request
+app.use(async (req, res, next) => {
+  try {
+    await bootstrapPromise;
+    next();
+  } catch (error) {
     res.status(500).json({ error: "Server Initialization Failed", details: error.message });
   }
 });

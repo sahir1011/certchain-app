@@ -35,15 +35,26 @@ function toBytes32(hexHash) {
   return ethers.dataSlice(hexHash, 0, 32);
 }
 
-// ── HEALTH ───────────────────────────────────────────────────────────────
+// ── PING (ultra-lightweight, no DB or blockchain) ────────────────────────
+router.get("/ping", (req, res) => {
+  res.json({ status: "ok", timestamp: Date.now() });
+});
+
+// ── HEALTH (cached block number, 10s TTL) ────────────────────────────────
+let _cachedBlock = { value: null, expiry: 0 };
+
 router.get("/health", async (req, res) => {
   try {
-    const blockNumber = await blockchain.getLatestBlockNumber();
+    const now = Date.now();
+    if (!_cachedBlock.value || now > _cachedBlock.expiry) {
+      _cachedBlock.value = await blockchain.getLatestBlockNumber();
+      _cachedBlock.expiry = now + 10_000; // cache for 10 seconds
+    }
     res.json({
       status: "ok",
       contractAddress: process.env.CONTRACT_ADDRESS,
       network: "sepolia",
-      blockNumber,
+      blockNumber: _cachedBlock.value,
     });
   } catch (e) {
     res.status(503).json({ status: "error", message: e.message });
