@@ -4,7 +4,7 @@ import Navbar, { type Tab } from "@/components/Navbar";
 import Dashboard from "@/components/Dashboard";
 import IssueCertificate from "@/components/IssueCertificate";
 import VerifyCertificate from "@/components/VerifyCertificate";
-import History from "@/components/History";
+import AdminDashboard from "@/components/AdminDashboard";
 import Background from "@/components/Background";
 import AdminLogin from "@/components/AdminLogin";
 import StudentLogin from "@/components/StudentLogin";
@@ -29,9 +29,8 @@ function HomeContent() {
           {activeTab === "dashboard" && <Dashboard setActiveTab={setActiveTab} />}
           {activeTab === "issue" && <IssueCertificate />}
           {activeTab === "verify" && <VerifyCertificate />}
-          {activeTab === "history" && <History />}
           {activeTab === "admin" && (
-            isAdminAuthenticated ? <IssueCertificate /> : <AdminLogin />
+            isAdminAuthenticated ? <AdminDashboard /> : <AdminLogin />
           )}
           {activeTab === "student" && (
             isStudentAuthenticated ? (

@@ -5,7 +5,7 @@ import { useAdmin } from "@/utils/adminContext";
 import { useStudent } from "@/utils/studentContext";
 import { Shield, Wallet, X, Menu, LogOut, UserCircle, GraduationCap } from "lucide-react";
 
-export type Tab = "dashboard" | "issue" | "verify" | "history" | "admin" | "student";
+export type Tab = "dashboard" | "issue" | "verify" | "admin" | "student";
 
 interface NavbarProps {
   activeTab: Tab;
@@ -17,8 +17,6 @@ const tabs: { id: Tab; label: string }[] = [
   { id: "admin", label: "Admin" },
   { id: "student", label: "Student" },
   { id: "verify", label: "Verify" },
-  { id: "history", label: "History" },
-
 ];
 
 export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {

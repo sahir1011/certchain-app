@@ -11,6 +11,37 @@ const { User, Student, Session } = require("./models");
 
 const router = express.Router();
 
+// Forward declaration of requireAuth for use in admin register
+async function requireAuth(req, res, next) {
+    const sessionToken = req.cookies?.sessionToken;
+
+    if (!sessionToken) {
+        return res.status(401).json({ message: "Authentication required." });
+    }
+
+    try {
+        const session = await Session.findOne({
+            where: {
+                token: sessionToken,
+                role: 'admin',
+                expiresAt: { [Op.gt]: new Date() }
+            }
+        });
+
+        if (!session) {
+            res.clearCookie("sessionToken");
+            return res.status(401).json({ message: "Invalid or expired session." });
+        }
+
+        // Attach user info to request
+        req.user = { username: session.username, role: 'admin' };
+        next();
+    } catch (e) {
+        console.error("Auth Middleware Error:", e);
+        res.status(500).json({ message: "Internal server error during authentication." });
+    }
+}
+
 // Session expiry: 24 hours
 const SESSION_DURATION = 24 * 60 * 60 * 1000;
 
@@ -138,6 +169,48 @@ router.post("/login", async (req, res) => {
     } catch (e) {
         console.error("[auth/login]", e);
         res.status(500).json({ message: "Login failed." });
+    }
+});
+
+// ── ADMIN REGISTER ───────────────────────────────────────────────────
+router.post("/register", requireAuth, async (req, res) => {
+    try {
+        const { newUsername, newPassword } = req.body;
+
+        if (!newUsername || !newPassword) {
+            return res.status(400).json({ message: "Username and password are required." });
+        }
+
+        if (newPassword.length < 6) {
+            return res.status(400).json({ message: "Password must be at least 6 characters long." });
+        }
+
+        // Check if username already exists
+        const existingAdmin = await User.findOne({ where: { username: newUsername } });
+        if (existingAdmin || newUsername === process.env.ADMIN_USERNAME || newUsername === "admin") {
+            return res.status(409).json({ message: "Username already exists." });
+        }
+
+        // Hash password
+        const salt = generateSalt();
+        const passwordHash = hashPassword(newPassword, salt);
+
+        // Store admin account
+        const newAdmin = await User.create({
+            username: newUsername,
+            passwordHash,
+            salt,
+            role: "admin"
+        });
+
+        res.status(201).json({
+            success: true,
+            message: "Admin account created successfully.",
+            user: { username: newUsername },
+        });
+    } catch (e) {
+        console.error("[auth/register]", e);
+        res.status(500).json({ message: "Failed to create admin account." });
     }
 });
 
@@ -357,36 +430,7 @@ router.get("/student/verify", async (req, res) => {
 // MIDDLEWARE
 // ══════════════════════════════════════════════════════════════════════
 
-// ── MIDDLEWARE: Require Admin Authentication ────────────────────────
-async function requireAuth(req, res, next) {
-    const sessionToken = req.cookies?.sessionToken;
-
-    if (!sessionToken) {
-        return res.status(401).json({ message: "Authentication required." });
-    }
-
-    try {
-        const session = await Session.findOne({
-            where: {
-                token: sessionToken,
-                role: 'admin',
-                expiresAt: { [Op.gt]: new Date() }
-            }
-        });
-
-        if (!session) {
-            res.clearCookie("sessionToken");
-            return res.status(401).json({ message: "Invalid or expired session." });
-        }
-
-        // Attach user info to request
-        req.user = { username: session.username, role: 'admin' };
-        next();
-    } catch (e) {
-        console.error("Auth Middleware Error:", e);
-        res.status(500).json({ message: "Internal server error during authentication." });
-    }
-}
+// (requireAuth is defined at the top of the file)
 
 // ── MIDDLEWARE: Require Student Authentication ──────────────────────
 async function requireStudentAuth(req, res, next) {

@@ -59,11 +59,8 @@ export async function healthCheck(): Promise<HealthResponse> {
   return data;
 }
 
-// payload can be JSON or FormData now
 export async function issueCertificate(payload: CertificatePayload | FormData): Promise<CertificateRecord> {
-  const isFormData = payload instanceof FormData;
-  const config = isFormData ? { headers: { "Content-Type": "multipart/form-data" } } : {};
-  const { data } = await api.post("/api/certificates/issue", payload, config);
+  const { data } = await api.post("/api/certificates/issue", payload);
   return data;
 }
 
@@ -84,6 +81,11 @@ export async function listCertificates(): Promise<CertificateRecord[]> {
 
 export async function revokeCertificate(certificateHash: string, issuerAddress?: string | null): Promise<{ txHash: string }> {
   const { data } = await api.post("/api/certificates/revoke", { certificateHash, issuerAddress });
+  return data;
+}
+
+export async function registerAdmin(newUsername: string, newPassword: string): Promise<{ success: boolean, message: string }> {
+  const { data } = await api.post("/api/auth/register", { newUsername, newPassword });
   return data;
 }
 

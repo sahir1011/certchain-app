@@ -5,7 +5,7 @@ import { useWallet } from "@/utils/walletContext";
 import { healthCheck, listCertificates } from "@/utils/api";
 import type { HealthResponse, CertificateRecord } from "@/utils/api";
 
-type Tab = "dashboard" | "admin" | "verify" | "history";
+type Tab = "dashboard" | "admin" | "verify" | "student";
 
 interface DashboardProps {
   setActiveTab: (tab: Tab) => void;
@@ -161,7 +161,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
         </button>
 
         <button
-          onClick={() => setActiveTab("history")}
+          onClick={() => setActiveTab("admin")}
           className="glass-card-hover p-6 text-left group"
         >
           <div className="flex items-center gap-3 mb-3">
@@ -169,8 +169,8 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
               <Clock size={24} />
             </div>
           </div>
-          <h3 className="text-lg font-semibold text-white">Certificate History</h3>
-          <p className="text-sm text-gray-400 mt-1">Browse all issued certificates and their on-chain status.</p>
+          <h3 className="text-lg font-semibold text-white">Manage Certificates</h3>
+          <p className="text-sm text-gray-400 mt-1">Browse and revoke issued certificates from the Admin dashboard.</p>
         </button>
       </div>
     </div>
