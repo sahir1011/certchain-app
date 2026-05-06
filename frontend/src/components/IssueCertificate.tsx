@@ -294,7 +294,7 @@ export default function IssueCertificate() {
                 <Field label="Student Name *" name="studentName" value={form.studentName} onChange={handleChange} placeholder="John Doe" required />
                 <Field label="Student ID *" name="studentId" value={form.studentId} onChange={handleChange} placeholder="STU-2024-001" required />
 
-                <Field label="Student Email (Optional)" name="studentEmail" type="email" value={form.studentEmail} onChange={handleChange} placeholder="student@example.com" />
+                <Field label="Student Email" name="studentEmail" type="email" value={form.studentEmail} onChange={handleChange} placeholder="student@example.com" />
 
                 <Field label="Course Name *" name="courseName" value={form.courseName} onChange={handleChange} placeholder="B.Tech Computer Science" required />
                 <Field label="Institution *" name="institutionName" value={form.institutionName} onChange={handleChange} placeholder="MIT" required />
