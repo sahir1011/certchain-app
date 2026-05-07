@@ -23,19 +23,51 @@ const { router: authRouter } = require("./auth");
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// ── allowed origins ─────────────────────────────────────────
+const ALLOWED_ORIGINS = [
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
 // ── middleware ──────────────────────────────────────────────
-app.use(helmet());
+// Helmet: relax policies that block cross-origin requests in Chrome/Firefox
+app.use(helmet({
+  crossOriginOpenerPolicy: false,
+  crossOriginEmbedderPolicy: false,
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+}));
 app.use(morgan("dev"));
+
+// CORS configuration
 app.use(cors({
-  origin: [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    process.env.FRONTEND_URL
-  ].filter(Boolean), // This allows local dev and Vercel frontend
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    if (ALLOWED_ORIGINS.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error("Not allowed by CORS"));
+  },
   methods: ["GET", "POST", "OPTIONS", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true, // Allow cookies
 }));
+
+// Explicit preflight handler — must respond BEFORE bootstrap wait
+app.options("*", cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (ALLOWED_ORIGINS.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error("Not allowed by CORS"));
+  },
+  methods: ["GET", "POST", "OPTIONS", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+}));
+
 app.use(express.json());
 app.use(cookieParser()); // Parse cookies
 

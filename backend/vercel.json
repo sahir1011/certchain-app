@@ -23,6 +23,9 @@
             "maxDuration": 30
         }
     },
+    "env": {
+        "NODE_ENV": "production"
+    },
     "crons": [
         {
             "path": "/api/ping",

@@ -11,6 +11,16 @@ const { User, Student, Session } = require("./models");
 
 const router = express.Router();
 
+const IS_PROD = process.env.NODE_ENV === "production";
+
+// Shared cookie options for cross-origin session cookies
+const COOKIE_OPTIONS = {
+    httpOnly: true,
+    secure: IS_PROD,
+    sameSite: IS_PROD ? "none" : "lax",
+    partitioned: IS_PROD, // Chrome CHIPS: required for cross-site cookies
+};
+
 // Forward declaration of requireAuth for use in admin register
 async function requireAuth(req, res, next) {
     const sessionToken = req.cookies?.sessionToken;
@@ -155,9 +165,7 @@ router.post("/login", async (req, res) => {
 
         // Set session cookie
         res.cookie("sessionToken", sessionToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            ...COOKIE_OPTIONS,
             maxAge: SESSION_DURATION,
         });
 
@@ -360,9 +368,7 @@ router.post("/student/login", async (req, res) => {
 
         // Set session cookie
         res.cookie("studentSessionToken", sessionToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            ...COOKIE_OPTIONS,
             maxAge: SESSION_DURATION,
         });
 
